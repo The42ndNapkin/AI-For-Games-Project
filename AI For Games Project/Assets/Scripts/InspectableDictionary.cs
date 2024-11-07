@@ -20,7 +20,7 @@ public class InspectableDictionary : MonoBehaviour
     [SerializeField] public List<WFCNode> Nodes;
 
     // use this to get the dictionary out of the nodes, in order to use it in your algorithms
-    Dictionary<Tile, HashSet<Tile>> toDictionary()
+    public Dictionary<Tile, HashSet<Tile>> toDictionary()
     {
         Dictionary<Tile, HashSet<Tile>> ret = new Dictionary<Tile, HashSet<Tile>>();
 
