@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class GenerateTiles : MonoBehaviour
 {
-    enum Tiles
+    public enum Tiles
     {
         UNDEFINED,
         Wall,
@@ -22,15 +22,16 @@ public class GenerateTiles : MonoBehaviour
     [SerializeField] InspectableDictionary iDic;
     private Dictionary<Tile, HashSet<Tile>> dict;
 
-    private int height = 3;
-    private int width = 3;
+    [SerializeField] private int height = 10;
+    [SerializeField] private int width = 18;
 
-    private Tiles[,] gameBoard;
+    public Tiles[,] gameBoard;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        gameBoard = new Tiles[height, width];
+        PremakeMap();
     }
 
     // Update is called once per frame
@@ -39,9 +40,136 @@ public class GenerateTiles : MonoBehaviour
 
     }
 
+    //Function to initialize the map's preset state
+    public void PremakeMap()
+    {
+        //Breaks out of the function if the board space isn't exactly lining up with the preset
+        if(height != 10 || width != 18)
+        {
+            Debug.LogWarning("Bounds of game board don't line up with the preset.");
+            return;
+        }
+        //Setup the tile walls
+        for(int i = 0; i < width; i++)
+        {
+            gameBoard[0, i] = Tiles.Wall;
+        }
+        for(int i = 0; i < width; i++)
+        {
+            gameBoard[height-1, i] = Tiles.Wall;
+        }
+        for(int i = 0; i < height; i++)
+        {
+            gameBoard[i,0] = Tiles.Wall;
+        }
+        for(int i = 0; i < height; i++)
+        {
+            gameBoard[i,width-1] = Tiles.Wall;
+        }
+        //Exit door
+        gameBoard[1, 3] = Tiles.Door;
+        //Vents
+        gameBoard[2, 1] = Tiles.Vent;
+        gameBoard[7, 15] = Tiles.Vent;
+        //Remaining Walls
+        gameBoard[1, 8] = Tiles.Wall;
+        gameBoard[2, 8] = Tiles.Wall;
+        gameBoard[3, 8] = Tiles.Wall;
+        gameBoard[3,14] = Tiles.Wall;
+        gameBoard[3,15] = Tiles.Wall;
+        gameBoard[3,16] = Tiles.Wall;
+        gameBoard[3,17] = Tiles.Wall;
+        gameBoard[5,9] = Tiles.Wall;
+        gameBoard[5,8] = Tiles.Wall;
+        gameBoard[5,7] = Tiles.Wall;
+        gameBoard[5,6] = Tiles.Wall;
+        gameBoard[5,5] = Tiles.Wall;
+        gameBoard[6,5] = Tiles.Wall;
+        gameBoard[7,5] = Tiles.Wall;
+        //Boxes
+        gameBoard[2, 16] = Tiles.Box;
+        gameBoard[2, 15] = Tiles.Box;
+        gameBoard[2, 14] = Tiles.Box;
+        gameBoard[5, 13] = Tiles.Box;
+        gameBoard[5, 12] = Tiles.Box;
+        gameBoard[5, 11] = Tiles.Box;
+        gameBoard[5, 10] = Tiles.Box;
+        gameBoard[6, 13] = Tiles.Box;
+        gameBoard[6, 12] = Tiles.Box;
+        gameBoard[6, 11] = Tiles.Box;
+        gameBoard[6, 10] = Tiles.Box;
+        gameBoard[4, 6] = Tiles.Box;
+        gameBoard[4, 1] = Tiles.Box;
+        gameBoard[5, 1] = Tiles.Box;
+        //Water
+        gameBoard[1, 6] = Tiles.Water;
+        gameBoard[1, 7] = Tiles.Water;
+        gameBoard[2, 6] = Tiles.Water;
+        gameBoard[2, 7] = Tiles.Water;
+        for(int i = 0; i < 8; i++)
+        {
+            gameBoard[1, 9+i] = Tiles.Water;
+        }
+        for(int i = 0; i < 4; i++)
+        {
+            for(int j = 0; j < 3; j++)
+            {
+                gameBoard[6 + j,1 + i] = Tiles.Water;
+            }
+        }
+        gameBoard[8, 5] = Tiles.Water;
+        //Noise Tiles
+        gameBoard[3, 3] = Tiles.NoiseTile;
+        gameBoard[5, 2] = Tiles.NoiseTile;
+        gameBoard[6, 6] = Tiles.NoiseTile;
+        gameBoard[8, 7] = Tiles.NoiseTile;
+        gameBoard[8, 13] = Tiles.NoiseTile;
+        gameBoard[5, 14] = Tiles.NoiseTile;
+        gameBoard[2, 12] = Tiles.NoiseTile;
+        //The rest of the tiles are floors
+        for(int i = 0; i < height; i++)
+        {
+            for(int j = 0; j < width; j++)
+            {
+                if (gameBoard[i,j] == Tiles.UNDEFINED)
+                {
+                    gameBoard[i, j] = Tiles.Floor;
+                }
+            }
+        }
+    }
+
+    //Function to create a game map using wave function collapse
     public void GenerateMap()
     {
-        
+        //Start by placing the exit on a random board edge
+        int exitEdge = Random.Range(0, 4);
+        int otherSide;
+        switch(exitEdge)
+        {
+            case 0:
+                otherSide = Random.Range(0, height);
+                gameBoard[0, otherSide] = Tiles.Door;
+                break;
+            case 1:
+                otherSide = Random.Range(0, height);
+                gameBoard[width, otherSide] = Tiles.Door;
+                break;
+            case 2:
+                otherSide = Random.Range(0, width);
+                gameBoard[otherSide, 0] = Tiles.Door;
+                break;
+            case 3:
+                otherSide = Random.Range(0, width);
+                gameBoard[otherSide, height] = Tiles.Door;
+                break;
+            default:
+                otherSide = Random.Range(0, width);
+                gameBoard[otherSide, height] = Tiles.Door;
+                break;
+        }
+
+
     }
 
     private int calculateEntropy(int x, int y)
