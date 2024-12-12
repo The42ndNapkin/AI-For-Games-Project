@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class GenerateTiles : MonoBehaviour
 {
@@ -18,6 +20,8 @@ public class GenerateTiles : MonoBehaviour
     }
 
     [SerializeField] private List<Tile> tileSet;
+    [SerializeField] private Player playerTemplate;
+    [SerializeField] private Guard guardTemplate;
 
     [SerializeField] InspectableDictionary iDic;
     private Dictionary<Tile, HashSet<Tile>> dict;
@@ -75,6 +79,7 @@ public class GenerateTiles : MonoBehaviour
         gameBoard[1, 8] = Tiles.Wall;
         gameBoard[2, 8] = Tiles.Wall;
         gameBoard[3, 8] = Tiles.Wall;
+        gameBoard[3,13] = Tiles.Wall;
         gameBoard[3,14] = Tiles.Wall;
         gameBoard[3,15] = Tiles.Wall;
         gameBoard[3,16] = Tiles.Wall;
@@ -137,8 +142,30 @@ public class GenerateTiles : MonoBehaviour
                 }
             }
         }
+        //Creates players and guards
+        Player p = Instantiate(playerTemplate);
+        p.setWorldPos(new Vector2(8, 9));
+
+        Guard g = Instantiate(guardTemplate);
+        g.setWorldPos(new Vector2(3, 4));
+        g.setPatrolLoc(new Vector2(3, 4));
+        //Might need to set patrol direction as well
     }
 
+    //Getter functions for height and width
+    public int getHeight()
+    { return height; }
+    public int getWidth()
+    { return width; }
+
+    //Function to change to menu screen if player wins
+    public void playerWin()
+    {
+        SceneManager.LoadScene("MenuScene");
+    }
+
+
+    //Wave function collapse to generate random map: For another time
     //Function to create a game map using wave function collapse
     public void GenerateMap()
     {
