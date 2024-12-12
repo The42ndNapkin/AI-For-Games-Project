@@ -38,7 +38,12 @@ public class SearchDecision : DecisionNode
     //updates astar path for looking at next obstacle
     void pathfindToNextCheck()
     {
-        pathToSpace = guard.pathfinder.findPath(guard.getGridPos(), spacesToCheck[0]);
+        //Debug.Log(spacesToCheck.Count);
+        if(spacesToCheck.Count > 0)
+        {
+            pathToSpace = guard.pathfinder.findPath(guard.getGridPos(), spacesToCheck[0]);
+        }
+        
     }
 
     //Gets all the spaces in the 2-block guard sightline
@@ -49,6 +54,13 @@ public class SearchDecision : DecisionNode
         {
             for(int j = -2; j < 2; j++)
             {
+                if ((int)centerGridLoc.x + i >= 0 && (int)centerGridLoc.x + i <= guard.tiles.getHeight())
+                {
+                    if ((int)centerGridLoc.y + i >= 0 && (int)centerGridLoc.y + i <= guard.tiles.getWidth())
+                    {
+                        continue;
+                    }
+                }
                 if(guard.tiles.gameBoard[(int)centerGridLoc.x + i, (int)centerGridLoc.y + j] == GenerateTiles.Tiles.Water || guard.tiles.gameBoard[(int)centerGridLoc.x + i, (int)centerGridLoc.y + j] == GenerateTiles.Tiles.Box)
                 {
                     l.Add(new Vector2((int)centerGridLoc.x + i, (int)centerGridLoc.y + j));

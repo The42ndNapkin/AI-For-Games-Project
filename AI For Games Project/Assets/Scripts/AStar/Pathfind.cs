@@ -1,3 +1,4 @@
+using ExtraUtility.Structures;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,44 @@ public class Pathfind : MonoBehaviour
 {
     //Get the aStar path by calling findpath and then calling bigGrid.finalPath;
     public BigGrid bigGrid;
+
+    public List<Vector2> findAStar(Vector2 start, Vector2 end)
+    {
+        AStarNode startNode = bigGrid.grid[(int)start.x, (int)start.y];
+        AStarNode endNode = bigGrid.grid[(int)end.x, (int)end.y];
+        PriorityQueue<float, AStarNode> openList = new PriorityQueue<float, AStarNode>();
+        HashSet<AStarNode> closedList = new HashSet<AStarNode>();
+        openList.enqueue(0, startNode);
+
+        while(!openList.isEmpty)
+        {
+            AStarNode currentNode = openList.dequeueValue();
+
+            if (currentNode == endNode)
+            {
+                return getFinalPath(startNode, endNode);
+            }
+
+            foreach (AStarNode neighbor in bigGrid.getNeighbors(currentNode))
+            {
+                //Debug.Log(neighbor.gridX + " " + neighbor.gridY);
+                if (neighbor.isWall || closedList.Contains(neighbor))
+                {
+                    continue;
+                }
+                if (!closedList.Contains(neighbor))
+                {
+                    neighbor.gCost = getHeurestic(neighbor, startNode);
+                    neighbor.hCost = getHeurestic(neighbor, endNode);
+                    neighbor.parent = currentNode;
+                    openList.enqueue(neighbor.gCost + neighbor.hCost, neighbor);
+                }
+            }
+        }
+
+        Debug.Log("Path not Found");
+        return null;
+    }
 
     //Astar algorithm to return a list of movements
     public List<Vector2> findPath(Vector2 startPos, Vector2 endPos)
@@ -36,7 +75,7 @@ public class Pathfind : MonoBehaviour
                 return getFinalPath(startNode, endNode);
             }
 
-            foreach(AStarNode neighbor in bigGrid.getNeighbors(currentNode))
+            foreach (AStarNode neighbor in bigGrid.getNeighbors(currentNode))
             {
                 //Debug.Log(neighbor.gridX + " " + neighbor.gridY);
                 if(neighbor.isWall || closedList.Contains(neighbor))
@@ -46,11 +85,10 @@ public class Pathfind : MonoBehaviour
                 if (!openList.Contains(neighbor))
                 {
                     openList.Add(neighbor);
-                    neighbor.gCost = currentNode.gCost + 1;
+                    neighbor.gCost = getHeurestic(neighbor,startNode);
                     neighbor.hCost = getHeurestic(neighbor, endNode);
                     neighbor.parent = currentNode;
                 }
-                
             }
         }
         Debug.Log("Path not Found");

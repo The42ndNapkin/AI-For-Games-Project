@@ -20,14 +20,15 @@ public class ChaseDecision : DecisionNode
 
     public override bool Execute()
     {
-        if (pathIndex >= chasePath.Count)
+        if (pathIndex >= chasePath.Count - 1)
         {
             return false;
         }
         //continues along the path to catch the player
-        Debug.Log(chasePath);
+        //Debug.Log(chasePath.Count);
         guard.setWorldPos(chasePath[pathIndex]);
         pathIndex++;
+        //Debug.Log(pathIndex);
         
         return true;
     }

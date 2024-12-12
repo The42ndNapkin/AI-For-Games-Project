@@ -64,10 +64,11 @@ public class Guard : MonoBehaviour
     public void setPatrolLoc(Vector2 v)
     { patrolLoc = v; }
 
-    public void init(Vector2 v)
+    public void init(Vector2 v, bool vertical)
     {
         setWorldPos(v);
         setPatrolLoc(v);
+        patrolDirection = vertical;
         dTree.setRoot(new SelectorNode(gameObject.GetComponent<Guard>(), player));
     }
 

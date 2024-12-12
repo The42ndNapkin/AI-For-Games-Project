@@ -148,8 +148,10 @@ public class GenerateTiles : MonoBehaviour
         p.setWorldPos(new Vector2(8, 9));
 
         Guard g = Instantiate(guardTemplate);
-        g.init(new Vector2(3, 4));
-        //Might need to set patrol direction as well
+        g.init(new Vector2(3, 4), true);
+
+        //Guard g1 = Instantiate(guardTemplate);
+        //g1.init(new Vector2(2, 11), false);
     }
 
     //Getter functions for height and width

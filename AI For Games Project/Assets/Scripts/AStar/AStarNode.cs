@@ -17,4 +17,14 @@ public class AStarNode
         isWall = wall;
         gridX = x; gridY = y;
     }
+
+    //public static bool operator ==(AStarNode left, AStarNode right)
+    //{
+    //    return left.gridX == right.gridX && left.gridY == right.gridY;
+    //}
+
+    //public static bool operator !=(AStarNode left, AStarNode right)
+    //{
+    //    return left.gridX != right.gridX && left.gridY != right.gridY;
+    //}
 }

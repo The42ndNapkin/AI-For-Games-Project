@@ -28,8 +28,25 @@ public class SelectorNode : DecisionNode
             //Was the guard already chasing?
             if(previousAction.GetType() == typeof(ChaseDecision))
             {
-                //continue with previous chase action
-                previousAction.Execute();
+                //If chase is done, start searching
+                if(!previousAction.Execute())
+                {
+                    //If the guard can still see player, keep chasing
+                    if(guard.canSeePlayer())
+                    {
+                        previousAction = new ChaseDecision(guard, player);
+                        previousAction.Execute();
+                    }
+                    else
+                    {
+                        //Otherwise keep searching
+                        //turn off noise alert
+                        guard.noiseOff();
+                        //Start new search action
+                        previousAction = new SearchDecision(guard, player);
+                        previousAction.Execute();
+                    }
+                }
             }
             else
             {
@@ -41,11 +58,15 @@ public class SelectorNode : DecisionNode
         //were we just chasing the player?
         else if(previousAction.GetType() == typeof(ChaseDecision))
         {
-            //turn off noise alert
-            guard.noiseOff();
-            //Start new search action
-            previousAction = new SearchDecision(guard, player);
-            previousAction.Execute();
+            //Is the guard done chasing?
+            if (!previousAction.Execute())
+            {
+                //turn off noise alert
+                guard.noiseOff();
+                //Start new search action
+                previousAction = new SearchDecision(guard, player);
+                previousAction.Execute();
+            }
         }
         //Were we checking nearby obstacles?
         else if(previousAction.GetType() == typeof(SearchDecision))
@@ -93,6 +114,7 @@ public class SelectorNode : DecisionNode
         {
             previousAction.Execute();
         }
+        Debug.Log(previousAction.GetType());
         return true;
     }
 }

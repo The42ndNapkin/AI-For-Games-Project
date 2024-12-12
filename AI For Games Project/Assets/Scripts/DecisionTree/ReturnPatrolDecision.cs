@@ -19,6 +19,7 @@ public class ReturnPatrolDecision : DecisionNode
 
     public override bool Execute()
     {
+        Debug.Log(returnPath);
         if (pathIndex >= returnPath.Count)
         {
             return false;

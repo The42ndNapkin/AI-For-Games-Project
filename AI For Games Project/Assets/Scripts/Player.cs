@@ -57,6 +57,27 @@ public class Player : MonoBehaviour
             //If space key pressed, vent to other vent
             //Iterates over entire 2d array until 2 vector2s of vent locations
             //Move player to location that they aren't currently at
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                if (tiles.gameBoard[(int)gridPos.x, (int)gridPos.y] == GenerateTiles.Tiles.Vent)
+                {
+                    for (int i = 0; i < tiles.getHeight(); i++)
+                    {
+                        for (int j = 0; j < tiles.getHeight(); j++)
+                        {
+                            if (tiles.gameBoard[i, j] == GenerateTiles.Tiles.Vent)
+                            {
+                                if(new Vector2(i,j) != gridPos)
+                                {
+                                    setWorldPos(new Vector2(i, j));
+                                    passTurn();
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
         
     }
