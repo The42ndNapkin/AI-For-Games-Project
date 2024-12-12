@@ -34,9 +34,9 @@ public class BigGrid : MonoBehaviour
         //Check right
         xCheck = centerNode.gridX + 1;
         yCheck = centerNode.gridY;
-        if(xCheck >= 0 && xCheck < gridWidth)
+        if(xCheck >= 0 && xCheck < gridHeight)
         {
-            if(yCheck >= 0 && yCheck < gridHeight)
+            if(yCheck >= 0 && yCheck < gridWidth)
             {
                 neighbors.Add(grid[xCheck, yCheck]);
             }

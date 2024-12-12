@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class Guard : MonoBehaviour
 {
@@ -35,7 +36,6 @@ public class Guard : MonoBehaviour
         ogPatrolLoc = gridPos;
         pathfinder = gameObject.GetComponent<Pathfind>();
         dTree = gameObject.GetComponent<DecisionTree>();
-        dTree.setRoot(new SelectorNode(gameObject.GetComponent<Guard>(), player));
         gMoney = gameObject.GetComponent<BigGrid>();
         gMoney.createGrid(tiles);
         pathfinder.bigGrid = gMoney;
@@ -43,8 +43,6 @@ public class Guard : MonoBehaviour
 
     public void setPatrolLength(int i)
     { patrolLength = i; }
-    public void setPatrol(Vector2 loc)
-    { patrolLoc = loc; }
     public Vector2 getPatrolLoc()
     { return patrolLoc; }
     public Vector2 getOGPatrol()
@@ -66,6 +64,13 @@ public class Guard : MonoBehaviour
     public void setPatrolLoc(Vector2 v)
     { patrolLoc = v; }
 
+    public void init(Vector2 v)
+    {
+        setWorldPos(v);
+        setPatrolLoc(v);
+        dTree.setRoot(new SelectorNode(gameObject.GetComponent<Guard>(), player));
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -77,6 +82,10 @@ public class Guard : MonoBehaviour
             //decision tree make a decision
             doBehavior();
             //Pass turn afterwards
+        }
+        if (gridPos == player.getGridPos())
+        {
+            SceneManager.LoadScene("MenuScene");
         }
     }
 

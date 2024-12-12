@@ -34,6 +34,7 @@ public class PatrolDecision : DecisionNode
             {
                 if(!guard.moveUp())
                 {
+                    //Debug.Log(patrolLoc.x);
                     patrolLine = false;
                 }
                 
@@ -48,11 +49,11 @@ public class PatrolDecision : DecisionNode
                 
             }
             //Checks if guard has reached end of patrol length, if so, turns around
-            if (guard.getGridPos().y <= patrolLoc.y - patrolLength - 1)
+            if (guard.getGridPos().x <= patrolLoc.x - patrolLength - 1)
             {
                 patrolLine = false;
             }
-            if (guard.getGridPos().y >= patrolLoc.y + patrolLength + 1)
+            if (guard.getGridPos().x >= patrolLoc.x + patrolLength + 1)
             {
                 patrolLine = true;
             }
@@ -77,11 +78,11 @@ public class PatrolDecision : DecisionNode
                 
             }
             //Checks if guard has reached end of patrol length, if so, turns around
-            if (guard.getGridPos().x <= patrolLoc.x - patrolLength - 1)
+            if (guard.getGridPos().y <= patrolLoc.y - patrolLength - 1)
             {
                 patrolLine = false;
             }
-            if (guard.getGridPos().x >= patrolLoc.x + patrolLength + 1)
+            if (guard.getGridPos().y >= patrolLoc.y + patrolLength + 1)
             {
                 patrolLine = true;
             }

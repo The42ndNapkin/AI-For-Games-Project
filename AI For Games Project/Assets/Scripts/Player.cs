@@ -80,6 +80,7 @@ public class Player : MonoBehaviour
         {
             pTurn = false;
         }
+        
     }
 
     //Shifts AI turn to player's turn

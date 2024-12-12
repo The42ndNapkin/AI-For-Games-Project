@@ -29,8 +29,9 @@ public class Pathfind : MonoBehaviour
             }
             openList.Remove(currentNode);
             closedList.Add(currentNode);
+            //Debug.Log(currentNode.gridX + " " + currentNode.gridY);
 
-            if(currentNode == endNode)
+            if (currentNode == endNode)
             {
                 return getFinalPath(startNode, endNode);
             }
@@ -42,22 +43,15 @@ public class Pathfind : MonoBehaviour
                 {
                     continue;
                 }
-                int moveCost = currentNode.gCost + getManhattenDistance(currentNode, neighbor);
-                if(moveCost < neighbor.gCost || !openList.Contains(neighbor))
+                if (!openList.Contains(neighbor))
                 {
-                    neighbor.gCost = moveCost;
-                    neighbor.hCost = getManhattenDistance(neighbor, endNode);
+                    openList.Add(neighbor);
+                    neighbor.gCost = currentNode.gCost + 1;
+                    neighbor.hCost = getHeurestic(neighbor, endNode);
                     neighbor.parent = currentNode;
-                    if(!openList.Contains(neighbor))
-                    {
-                        openList.Add(neighbor);
-                    }
                 }
+                
             }
-        }
-        foreach(AStarNode v in closedList)
-        {
-            Debug.Log(v.gridX + " " + v.gridY);
         }
         Debug.Log("Path not Found");
         return null;
@@ -83,10 +77,19 @@ public class Pathfind : MonoBehaviour
     {
         int ix = Mathf.Abs(current.gridX - neighbor.gridX);
         int iy = Mathf.Abs(current.gridY - neighbor.gridY);
-        if( ix > iy)
+        
+        return (ix + iy);
+    }
+
+    int getHeurestic(AStarNode current, AStarNode neighbor)
+    {
+        int ix = Mathf.Abs(current.gridX - neighbor.gridX);
+        int iy = Mathf.Abs(current.gridY - neighbor.gridY);
+        if(current.isWall)
         {
-            return (14 * iy + 10 * (ix - iy));
+            ix *= 100;
+            iy *= 100;
         }
-        return (14 * ix + 10 * (iy - ix));
+        return ix*ix + iy*iy;
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class GenerateTiles : MonoBehaviour
 {
@@ -147,8 +148,7 @@ public class GenerateTiles : MonoBehaviour
         p.setWorldPos(new Vector2(8, 9));
 
         Guard g = Instantiate(guardTemplate);
-        g.setWorldPos(new Vector2(3, 4));
-        g.setPatrolLoc(new Vector2(3, 4));
+        g.init(new Vector2(3, 4));
         //Might need to set patrol direction as well
     }
 
